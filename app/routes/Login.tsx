@@ -27,37 +27,46 @@ const Login = () => {
   };
 
   async function onSubmit(e: React.FormEvent) {
-  e.preventDefault();
+    e.preventDefault();
 
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email: formData.email,
-    password: formData.password,
-  });
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: formData.email,
+      password: formData.password,
+    });
 
-  if (error || !data?.user) {
-    toast.error("Failed to sign in. Please check your credentials.");
-    return;
+    if (error || !data?.user) {
+      toast("Error!",{
+        description: "Failed to sign in. Please check your credentials.",
+        className: "bg-red-600 text-white text-sm px-6 py-4 rounded-lg w-[400px]", // Custom color and size
+        unstyled: true,
+      })
+      return;
+    }
+
+    const user = data.user;
+
+    const { data: profile, error: userError } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("user_id", user.id)
+      .single();
+
+    if (userError) {
+      navigate("/landing")
+      toast("Couldn't fetch profile");
+      return;
+    }
+     toast("Success!",{
+        description: "Welcome, back",
+        className: "bg-green-600 text-white text-sm px-6 py-4 rounded-lg w-[400px]", // Custom color and size
+        unstyled: true,
+      })
+
+    setProfile(profile);
+    navigate("/notes");
+    setFormData({ email: "", password: "" });
+
   }
-
-  const user = data.user;
-
-  const { data: profile, error: userError } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("user_id", user.id) 
-    .single();
-
-  if (userError) {
-    navigate("/landing")
-    toast.error("Couldn't fetch profile"); 
-    return;
-  }
-
-  setProfile(profile);
-  navigate("/notes");
-  setFormData({ email: "", password: "" });
-
-}
 
 
   return (
