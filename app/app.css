@@ -1,20 +1,11 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (html.dark &);
 
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-}
-
-html,
-body {
-  @apply bg-white dark:bg-gray-950;
-
-  @media (prefers-color-scheme: dark) {
-    color-scheme: dark;
-  }
 }
 
 @theme inline {
@@ -90,7 +81,7 @@ body {
   --sidebar-ring: oklch(0.708 0 0);
 }
 
-.dark {
+html.dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
@@ -128,7 +119,35 @@ body {
   * {
     @apply border-border outline-ring/50;
   }
+  
+  html,
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground antialiased;
+  }
+  
+  /* Light mode background */
+  html:not(.dark) body {
+    @apply bg-gradient-to-tr from-blue-100 via-blue-200 to-indigo-300;
+  }
+  
+  /* Dark mode background */
+  html.dark body {
+    @apply bg-gray-950;
+  }
+  
+}
+
+/* Optional: Smooth transitions for theme changes */
+@layer base {
+  html {
+    transition: color-scheme 0.2s;
+  }
+  
+  body {
+    transition: background 0.3s ease-in-out;
+  }
+  
+  * {
+    transition: border-color 0.2s, background-color 0.2s, color 0.2s;
   }
 }

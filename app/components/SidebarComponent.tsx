@@ -11,6 +11,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import ConfirmationModal from './ConfirmationModal';
 
 const SidebarComponent = ({
+  setIsSidebarOpen,
   notes,
   deleteNote,
   categories,
@@ -31,7 +32,6 @@ const SidebarComponent = ({
   const [renameValue, setRenameValue] = useState<string>('')
   const [newCategoryName, setNewCategoryName] = useState<string>('')
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [confirmModal, setConfirmModal] = useState<{
     isOpen: boolean;
@@ -52,9 +52,6 @@ const SidebarComponent = ({
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
-      if (window.innerWidth >= 768) {
-        setIsMobileOpen(false);
-      }
     };
 
     checkMobile();
@@ -212,7 +209,7 @@ const SidebarComponent = ({
         <div className="p-4">
           {/* All Notes Button */}
           <button
-            onClick={() => toggleActiveCategory(generalCategory?.id || '')}
+            onClick={() => {toggleActiveCategory(generalCategory?.id || ''), setIsSidebarOpen(false)}}
             className={`w-full flex items-center justify-between px-3 py-2 mb-4 text-sm rounded-lg transition-colors ${activeCategory?.name === 'General'
               ? 'bg-blue-50 border border-blue-200 text-blue-700'
               : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
@@ -303,6 +300,7 @@ const SidebarComponent = ({
                                 e.preventDefault();
                                 e.stopPropagation();
                                 toggleActiveCategory(category.id);
+                                setIsSidebarOpen(false)
                               }}
                               className={`flex-1 flex items-center justify-between px-3 py-2 text-sm transition-colors ${activeCategory?.id === category.id
                                 ? 'text-blue-700'

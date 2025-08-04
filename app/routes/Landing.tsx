@@ -2,6 +2,7 @@ import { Link,NavLink } from 'react-router';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { FileText, Users, Shield, Zap, ArrowRight, Edit3, FolderOpen, Search } from 'lucide-react';
+import { ThemeToggle } from '../features/ThemeToggle';
 
 const Landing = () => {
 
@@ -29,23 +30,24 @@ const Landing = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
+        <div className="min-h-screen bg-transparent ">
             {/* Header */}
-            <header className="border-b border-gray-200 bg-white/80 backdrop-blur-sm">
+            <header className="border-b border-gray-200 dark:border-[#30363D] bg-blue-50 dark:bg-[#0D1117] backdrop-blur-sm">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between items-center h-16">
                         <div className="flex items-center space-x-2">
                             <FileText className="h-8 w-8 text-blue-600" />
-                            <span className="text-xl font-semibold text-gray-900">Notes</span>
+                            <span className="text-xl font-semibold text-gray-900 dark:text-gray-300">Notea</span>
                         </div>
                         <div className="flex items-center space-x-4">
+                            <ThemeToggle />
                             <NavLink to="/login" tabIndex={-1}>
-                                <Button variant="ghost" className="text-gray-600 hover:text-gray-900 hover:bg-blue-50">
+                                <Button variant="ghost" className="text-gray-600 hover:text-gray-900 hover:bg-blue-50 dark:text-[#F0F6FC]">
                                     Sign In
                                 </Button>
                             </NavLink>
                             <NavLink to="/signup" tabIndex={-1}>
-                                <Button className="bg-blue-600 hover:bg-blue-700">
+                                <Button className="bg-blue-600 hover:bg-blue-700 dark:text-[#F0F6FC]">
                                     Get Started
                                 </Button>
                             </NavLink>
@@ -57,11 +59,11 @@ const Landing = () => {
             {/* Hero Section */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
                 <div className="text-center">
-                    <h1 className="text-4xl sm:text-6xl font-bold text-gray-900 mb-6">
+                    <h1 className="text-4xl sm:text-6xl font-bold text-gray-900 dark:text-gray-300 mb-6">
                         Your thoughts,
                         <span className="text-blue-600"> beautifully organized</span>
                     </h1>
-                    <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+                    <p className="text-xl text-gray-600 dark:text-[#8B949E] mb-8 max-w-2xl mx-auto">
                         A clean, modern note-taking app that helps you capture ideas, organize thoughts,
                         and stay productive. Simple, fast, and distraction-free.
                     </p>
@@ -69,7 +71,7 @@ const Landing = () => {
                         <Link to="/signup" tabIndex={-1}>
                             <Button
                                 size="lg"
-                                className="bg-blue-600 hover:bg-blue-700 text-lg px-8 py-3 "
+                                className="bg-blue-600 hover:bg-blue-700 dark:text-[#F0F6FC] text-lg px-8 py-3 "
                             >
                                 Start Taking Notes
                                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -91,7 +93,7 @@ const Landing = () => {
             {/* Features Grid */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
                 <div className="text-center mb-16">
-                    <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                    <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-400 mb-4">
                         Everything you need to stay organized
                     </h2>
                     <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -103,7 +105,7 @@ const Landing = () => {
                     {features.map((feature, index) => {
                         const IconComponent = feature.icon;
                         return (
-                            <Card key={index} className="border-0 shadow-sm hover:shadow-lg transition-shadow">
+                            <Card key={index} className="border-0 dark:bg-[#0D1117] shadow-sm shadow-blue-200 dark:shadow-gray-600 hover:shadow-lg transition-shadow">
                                 <CardHeader className="text-center pb-4">
                                     <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
                                         <IconComponent className="h-6 w-6 text-blue-600" />
@@ -111,7 +113,7 @@ const Landing = () => {
                                     <CardTitle className="text-lg">{feature.title}</CardTitle>
                                 </CardHeader>
                                 <CardContent className="text-center pt-0">
-                                    <CardDescription className="text-gray-600">
+                                    <CardDescription className="text-gray-600 dark:text-gray-300">
                                         {feature.description}
                                     </CardDescription>
                                 </CardContent>
@@ -122,20 +124,20 @@ const Landing = () => {
             </section>
 
             {/* CTA Section */}
-            <section className="bg-blue-600 text-white">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <section className="bg-blue-800 dark:bg-[#0D1117] text-white">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                     <div className="text-center">
                         <h2 className="text-3xl font-bold mb-4">
                             Ready to get organized?
                         </h2>
-                        <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+                        <p className="text-xl text-blue-100 dark:text-[#8B949E] mb-8 max-w-2xl mx-auto">
                             Join thousands of users who have transformed their note-taking experience
                         </p>
                         <NavLink to="/signup" tabIndex={-1}>
                             <Button
                                 size="lg"
                                 variant="secondary"
-                                className="bg-white text-blue-600 hover:text-blue-700 hover:bg-gray-50 text-lg px-8 py-3"
+                                className="bg-white dark:bg-blue-600 dark:text-[#F0F6FC] text-blue-600 hover:text-blue-700  hover:bg-gray-50 dark:hover:bg-blue-700 text-lg px-8 py-3"
                             >
                                 Start Your Journey
                                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -146,20 +148,20 @@ const Landing = () => {
             </section>
 
             {/* Footer */}
-            <footer className="bg-gray-50 border-t border-gray-200">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <footer className="bg-transparent border-t border-gray-200 dark:border-[#21262D] dark:bg-[#0D1117]">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
                     <div className="flex flex-col md:flex-row justify-between items-center">
                         <div className="flex items-center space-x-2 mb-4 md:mb-0">
                             <FileText className="h-6 w-6 text-blue-600" />
                             <span className="text-lg font-semibold text-gray-900">Notes</span>
                         </div>
                         <div className="flex items-center space-x-6 text-sm text-gray-600">
-                            <a href="#" className="hover:text-gray-900 transition-colors">Privacy</a>
-                            <a href="#" className="hover:text-gray-900 transition-colors">Terms</a>
-                            <a href="#" className="hover:text-gray-900 transition-colors">Support</a>
+                            <a href="#" className="hover:text-gray-900 dark:hover:text-gray-700 transition-colors">Privacy</a>
+                            <a href="#" className="hover:text-gray-900 dark:hover:text-gray-700 transition-colors">Terms</a>
+                            <a href="#" className="hover:text-gray-900 dark:hover:text-gray-700 transition-colors">Support</a>
                         </div>
                     </div>
-                    <div className="mt-8 pt-8 border-t border-gray-200 text-center text-sm text-gray-500">
+                    <div className="mt-3 pt-5 border-t border-gray-200 dark:border-none text-center text-sm text-gray-500">
                         © 2024 Notes. All rights reserved.
                     </div>
                 </div>

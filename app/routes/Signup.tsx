@@ -56,7 +56,7 @@ const SignUp = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
@@ -64,11 +64,11 @@ const SignUp = () => {
             <FileText className="h-8 w-8" />
             <span className="text-2xl font-semibold">Notes</span>
           </Link>
-          <h1 className="text-3xl font-bold text-gray-900 mt-6 mb-2">Create your account</h1>
-          <p className="text-gray-600">Start organizing your thoughts today</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-300 mt-6 mb-2">Create your account</h1>
+          <p className="text-gray-600 dark:text-[#8B949E]">Start organizing your thoughts today</p>
         </div>
 
-        <Card className="shadow-xl border-0">
+        <Card className="shadow-xl border-0 bg-[#0D1117]">
           <CardHeader className="space-y-1 pb-4">
             <CardTitle className="text-xl text-center">Sign up</CardTitle>
             <CardDescription className="text-center">
@@ -79,7 +79,7 @@ const SignUp = () => {
             {/* Google Sign Up Button */}
             <Button
               variant="outline"
-              className="w-full h-11 text-gray-700 border-gray-300 hover:bg-gray-50"
+              className="w-full h-11 text-gray-700 dark:text-[#8B949E] border-gray-300 hover:bg-gray-50"
               onClick={handleGoogleSignUp}
             >
               <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
@@ -93,10 +93,10 @@ const SignUp = () => {
 
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t border-gray-300" />
+                <span className="w-full border-t border-gray-300 dark:border-[#30363D]" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-white px-2 text-gray-500">Or continue with</span>
+                <span className="bg-white dark:bg-[#161B22] px-2 text-gray-500 dark:text-white">Or continue with</span>
               </div>
             </div>
 
@@ -184,14 +184,14 @@ const SignUp = () => {
                 </div>
               </div>
 
-              <Button type="submit" className="w-full h-11 bg-blue-600 hover:bg-blue-700">
+              <Button type="submit" className="w-full h-11 bg-blue-600 hover:bg-blue-700 dark:text-white">
                 Create account
               </Button>
             </form>
 
             <div className="text-center text-sm">
-              <span className="text-gray-600">Already have an account? </span>
-              <Link to="/login" className="text-blue-600 hover:text-blue-700 hover:underline font-medium">
+              <span className="text-gray-600 dark:text-[#8B949E]">Already have an account? </span>
+              <Link to="/login" className="text-blue-600 dark:text-blue-500 hover:text-blue-700 hover:underline font-medium">
                 Sign in
               </Link>
             </div>

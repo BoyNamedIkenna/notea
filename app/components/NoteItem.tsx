@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router";
 import type { Note, Category } from "../types/notea";
 import { Calendar, Edit3, EllipsisVertical, Plus, Check } from "lucide-react"
@@ -21,6 +21,7 @@ interface NoteItemProps {
     changeNoteCategory: (noteId: string, categoryId: string) => Promise<void>;
     deleteNote: (id: string) => void;
     getPreview: (content: string) => string;
+    isMobile: boolean
 }
 
 const NoteItem = ({
@@ -28,7 +29,8 @@ const NoteItem = ({
     activeCategoryNotes,
     changeNoteCategory,
     deleteNote,
-    getPreview
+    getPreview,
+    isMobile
 }: NoteItemProps) => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [confirmModal, setConfirmModal] = useState<{
@@ -43,8 +45,10 @@ const NoteItem = ({
         noteId: null,
         noteName: '',
     });
+
+
     const navigate = useNavigate();
-    
+
     const handleNoteClick = (e: React.MouseEvent, noteID: string) => {
         if (dropdownOpen) {
             e.preventDefault(); // Block navigation
@@ -52,10 +56,10 @@ const NoteItem = ({
             navigate(`/editor/${noteID}`);
         }
     };
-    const handleChangeCategory = (e: React.MouseEvent,noteId:string,categoryId:string) => {
-            e.preventDefault(); // Block navigation
-            changeNoteCategory(noteId,categoryId)
-    } 
+    const handleChangeCategory = (e: React.MouseEvent, noteId: string, categoryId: string) => {
+        e.preventDefault(); // Block navigation
+        changeNoteCategory(noteId, categoryId)
+    }
     const handleDeleteNote = (noteId: string, noteName: string) => {
         setConfirmModal({
             isOpen: true,
@@ -107,16 +111,16 @@ const NoteItem = ({
                                     <DropdownMenu onOpenChange={setDropdownOpen}>
                                         <DropdownMenuTrigger asChild>
                                             <button
-                                                className="opacity-0 group-hover:opacity-100 data-[state=open]:opacity-100 transition-opacity  rounded"
+                                                className={`${!isMobile && " opacity-0 group-hover:opacity-100 data-[state=open]:opacity-100 transition-opacity"}rounded`}
                                             >
                                                 <EllipsisVertical className="w-5 h-5 text-muted-foreground" />
                                             </button>
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent className="z-50">
-                                            <DropdownMenuItem onClick={() => {handleNoteClick}}>Edit</DropdownMenuItem>
+                                            <DropdownMenuItem onClick={()=> navigate(`/editor/${note.id}`)}>Edit</DropdownMenuItem>
                                             <DropdownMenuSub>
                                                 <DropdownMenuSubTrigger >
-                                                    Category
+                                                    Move to
                                                 </DropdownMenuSubTrigger>
                                                 <DropdownMenuPortal>
                                                     <DropdownMenuSubContent
@@ -127,9 +131,9 @@ const NoteItem = ({
                                                             <DropdownMenuItem
                                                                 key={category.id}
                                                                 className="text-sm justify-between"
-                                                                onClick={(e) => {handleChangeCategory(e,note.id,category.id)}}
+                                                                onClick={(e) => { handleChangeCategory(e, note.id, category.id) }}
                                                             >
-                                                                {category.name}
+                                                                {category.name==="General" ? (<p>General <span className="text-sm text-gray-500">(Default)</span></p>) : category.name}
                                                                 {category.id === note.category_id && <Check className="w-2 h-2 text-black" />}
                                                             </DropdownMenuItem>
                                                         ))}

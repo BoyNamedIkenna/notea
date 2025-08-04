@@ -22,6 +22,7 @@ export interface Note {
 }
 
 export interface SidebarProps {
+    setIsSidebarOpen:React.Dispatch<React.SetStateAction<boolean>>
     notes: Note[];
     deleteNote: (id: string) => Promise<void>;
     categories: Category[];

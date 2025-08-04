@@ -11,7 +11,8 @@ import {
   Heading1,
   Heading2
 } from "lucide-react";
-import { Button } from "../components/ui/button";
+import { Button } from "./ui/button";
+import {ScrollArea } from "./ui/scroll-area";
 
 interface RichTextEditorProps {
   content: string;
@@ -60,12 +61,12 @@ const RichTextEditor = ({ content, onChange, placeholder = "Start writing..." }:
   ];
 
   return (
-    <div className="w-full bg-white rounded-lg shadow-sm">
+    <div className="w-full bg-gray-100 rounded-lg shadow-sm">
       {/* Toolbar */}
-      <div className="border-b  bg-gray-50 rounded-t-xl px-2 py-3">
-        <div className="flex flex-wrap items-center gap-1">
+      <div className="border-b  bg-gray-50 rounded-t-xl md:px-2 py-3">
+        <div className="flex flex-wrap items-center md:gap-1">
           {/* Headings */}
-          <div className="flex items-center border-r border-gray-300 pr-3 mr-3">
+          <div className="flex items-center border-r border-gray-300 md:pr-3 md:mr-3">
             <Button
               variant="ghost"
               size="sm"
@@ -87,7 +88,7 @@ const RichTextEditor = ({ content, onChange, placeholder = "Start writing..." }:
           </div>
 
           {/* Text Formatting */}
-          <div className="flex items-center border-r border-gray-300 pr-3 mr-3">
+          <div className="flex items-center border-r border-gray-300 md:pr-3 md:mr-3">
             <Button
               variant="ghost"
               size="sm"
@@ -118,7 +119,7 @@ const RichTextEditor = ({ content, onChange, placeholder = "Start writing..." }:
           </div>
 
           {/* Lists */}
-          <div className="flex items-center border-r border-gray-300 pr-3 mr-3">
+          <div className="flex items-center border-r border-gray-300 md:pr-3 md:mr-3">
             <Button
               variant="ghost"
               size="sm"
@@ -140,12 +141,12 @@ const RichTextEditor = ({ content, onChange, placeholder = "Start writing..." }:
           </div>
 
           {/* Text Alignment */}
-          <div className="flex items-center border-r border-gray-300 pr-3 mr-3">
+          <div className="flex items-center border-r border-gray-300 md:pr-3 md:mr-3">
             <Button
               variant="ghost"
               size="sm"
               onClick={() => executeCommand("justifyLeft")}
-              className="h-8 px-2 hover:bg-white hover:shadow-sm"
+              className="h-8 px-1 hover:bg-white hover:shadow-sm"
               title="Align Left"
             >
               <AlignLeft className="h-4 w-4" />
@@ -171,7 +172,7 @@ const RichTextEditor = ({ content, onChange, placeholder = "Start writing..." }:
           </div>
 
           {/* Color Picker */}
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 px-1 mt-0.5">
             <span className="text-xs text-gray-600 mr-2 font-medium">Color:</span>
             <div className="flex gap-1">
               {colors.map((color) => (
@@ -190,18 +191,20 @@ const RichTextEditor = ({ content, onChange, placeholder = "Start writing..." }:
       </div>
 
       {/* Editor */}
-      <div
-        ref={editorRef}
-        contentEditable
-        onInput={handleInput}
-        className="min-h-[300px] p-8 focus:outline-none text-gray-800 [&:empty]:before:content-[attr(data-placeholder)] [&:empty]:before:text-gray-400 [&:empty]:before:pointer-events-none"
-        style={{
-          fontSize: "16px",
-          lineHeight: "1.75",
-          fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-        }}
-        data-placeholder={placeholder}
-      />
+      <div className="overflow-y-auto scrollbar-thin scrollbar-thumb-blue-600 scrollbar-track-gray-200">
+        <div
+          ref={editorRef}
+          contentEditable
+          onInput={handleInput}
+          className="h-[60vh] md:min-h-[70vh] lg:min-h-[80vh] p-8 focus:outline-none text-gray-800 [&:empty]:before:content-[attr(data-placeholder)] [&:empty]:before:text-gray-400 [&:empty]:before:pointer-events-none"
+          style={{
+            fontSize: "16px",
+            lineHeight: "1.75",
+            fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+          }}
+          data-placeholder={placeholder}
+        />
+      </div>
 
     </div>
   );
