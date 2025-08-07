@@ -61,9 +61,9 @@ const RichTextEditor = ({ content, onChange, placeholder = "Start writing..." }:
   ];
 
   return (
-    <div className="w-full bg-gray-100 rounded-lg shadow-sm">
+    <div className="w-full bg-gray-100  dark:bg-[#0D1117] rounded-lg shadow-sm">
       {/* Toolbar */}
-      <div className="border-b  bg-gray-50 rounded-t-xl md:px-2 py-3">
+      <div className="border-b  bg-gray-50  dark:bg-[#0D1117] rounded-t-xl md:px-2 py-3">
         <div className="flex flex-wrap items-center md:gap-1">
           {/* Headings */}
           <div className="flex items-center border-r border-gray-300 md:pr-3 md:mr-3">
@@ -173,7 +173,7 @@ const RichTextEditor = ({ content, onChange, placeholder = "Start writing..." }:
 
           {/* Color Picker */}
           <div className="flex items-center gap-1 px-1 mt-0.5">
-            <span className="text-xs text-gray-600 mr-2 font-medium">Color:</span>
+            <span className="text-xs text-gray-600 dark:text-white mr-2 font-medium">Color:</span>
             <div className="flex gap-1">
               {colors.map((color) => (
                 <button

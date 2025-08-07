@@ -10,6 +10,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collap
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
 import ConfirmationModal from './ConfirmationModal';
 
+
 const SidebarComponent = ({
   setIsSidebarOpen,
   notes,
@@ -194,14 +195,14 @@ const SidebarComponent = ({
 
 
   return (
-    <div className="w-64 bg-white border-r border-gray-200 flex flex-col h-screen">
+    <div className="w-64  border-r border-gray-200 dark:border-[#30363D] flex flex-col h-screen">
       {/* Header Section */}
-      <div className="p-6 border-b border-gray-100">
+      <div className="p-6 border-b border-gray-100 dark:border-[#30363D]">
         <div className="flex items-center space-x-2 mb-1">
           <FileText className="h-6 w-6 text-blue-600" />
-          <h1 className="text-xl font-semibold text-gray-900">Notes</h1>
+          <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-300">Notea</h1>
         </div>
-        <p className="text-sm text-gray-500">Organize your thoughts</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400">Organize your thoughts</p>
       </div>
 
       {/* Categories Section */}
@@ -210,22 +211,22 @@ const SidebarComponent = ({
           {/* All Notes Button */}
           <button
             onClick={() => {toggleActiveCategory(generalCategory?.id || ''), setIsSidebarOpen(false)}}
-            className={`w-full flex items-center justify-between px-3 py-2 mb-4 text-sm rounded-lg transition-colors ${activeCategory?.name === 'General'
-              ? 'bg-blue-50 border border-blue-200 text-blue-700'
-              : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+            className={`group w-full flex items-center justify-between px-3 py-2 mb-4 text-sm rounded-lg transition-colors ${activeCategory?.name === 'General'
+              ? 'bg-blue-50 dark:bg-[#0D1117] border dark:border-[#30363D] border-blue-200 text-blue-700 dark:text-blue-500'
+              : 'text-gray-700 dark:text-gray-100  hover:text-gray-900  hover:bg-gray-50 dark:hover:bg-gray-800'
               }`}
           >
             <div className="flex items-center space-x-2">
               <FileText className="h-4 w-4" />
               <span className="font-medium">All Notes</span>
             </div>
-            <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
+            <span className="text-xs bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 dark:group-hover:bg-gray-700 px-2 py-1 rounded-full">
               {notes.length}
             </span>
           </button>
 
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-sm font-medium text-gray-900 uppercase tracking-wide">
+            <h2 className="text-sm font-medium text-gray-900 dark:text-gray-400 uppercase tracking-wide">
               Categories
             </h2>
             <Button
@@ -282,7 +283,7 @@ const SidebarComponent = ({
                       </div>
                     ) : (
                       <Collapsible key={category.id} open={isExpanded} onOpenChange={() => toggleOpenCategory(category.id)}>
-                        <div className={`rounded-lg group ${activeCategory?.id === category.id ? 'bg-blue-50 border border-blue-200' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'}`}>
+                        <div className={`rounded-lg group ${activeCategory?.id === category.id ? 'bg-blue-50 dark:bg-[#0D1117] dark:border-[#30363D] border border-blue-200 dark:text-blue-500' : 'text-gray-700 dark:text-gray-100 hover:text-gray-900  hover:bg-gray-50 dark:hover:bg-gray-800'}`}>
                           <div className='flex items-center'>
                             <CollapsibleTrigger asChild>
                               <Button variant="ghost" size="sm" className='hover:bg-transparent'>
@@ -302,16 +303,16 @@ const SidebarComponent = ({
                                 toggleActiveCategory(category.id);
                                 setIsSidebarOpen(false)
                               }}
-                              className={`flex-1 flex items-center justify-between px-3 py-2 text-sm transition-colors ${activeCategory?.id === category.id
-                                ? 'text-blue-700'
-                                : 'text-gray-700 hover:text-gray-900'
+                              className={`flex-1 flex items-center justify-between  py-2 text-sm transition-colors ${activeCategory?.id === category.id
+                                ? 'text-blue-700 dark:text-blue-500'
+                                : 'text-gray-700 dark:text-gray-300 hover:text-gray-900'
                                 }`}
                             >
                               <div className="flex items-center space-x-3">
                                 <Folder className="h-4 w-4" />
-                                <span className="font-medium">{category.name}</span>
+                                <span className="font-medium ">{category.name}</span>
                               </div>
-                              <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
+                              <span className="text-xs bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 px-2 py-1 rounded-full">
                                 {categoryNotes.length}
                               </span>
                             </button>
@@ -341,11 +342,11 @@ const SidebarComponent = ({
                               {categoryNotes.map((note) => (
                                 <div
                                   key={note.id}
-                                  className="flex items-center justify-between w-full text-left px-3 py-2 text-sm text-gray-700 hover:text-gray-900 hover:bg-blue-50 hover:border-blue-200 bg-gray-50 border border-gray-200 rounded-md transition-all duration-200 truncate"
+                                  className="flex items-center justify-between w-full text-left px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 hover:bg-blue-50 hover:border-blue-200 bg-gray-50  dark:hover:bg-gray-800 dark:bg-[#0D1117] border border-gray-200 dark:border-[#30363D] rounded-md transition-all duration-200 truncate"
                                 >
                                   <Link to={`/editor/${note.id}`}>
                                     <button title={note.title}>
-                                      <FileText className="h-3.5 w-3.5 inline mr-2 text-gray-500" />
+                                      <FileText className="h-3.5 w-3.5 inline mr-2 text-gray-500 dark:text-gray-400" />
                                       {note.title || "Untitled"}
                                     </button>
                                   </Link>
@@ -369,19 +370,19 @@ const SidebarComponent = ({
       </div>
 
       {/* User Section */}
-      <div className="border-t border-gray-100 p-4">
+      <div className="border-t border-gray-100 dark:border-[#30363D] p-4">
         <div className="flex items-center space-x-3 mb-3">
           <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
-            <span className="text-xs font-medium text-white">
+            <span className="text-xs font-medium text-white ">
                {profile?.user_name?.charAt(0).toUpperCase()}
             </span>
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-gray-900 truncate">{profile?.user_name}</p>
+            <p className="text-sm font-medium text-gray-900 dark:text-gray-300 truncate">{profile?.user_name}</p>
           </div>
         </div>
 
-        <div className="flex space-x-2">
+        <div className="flex items-center space-x-2">
           <Button variant="ghost" size="sm" className="flex-1 justify-start">
             <Settings className="h-4 w-4 mr-2" />
             Settings
@@ -389,7 +390,7 @@ const SidebarComponent = ({
           <Button
             variant="ghost"
             size="sm"
-            className="text-red-600 hover:text-red-700"
+            className="text-red-600 dark:text-red-500 hover:text-red-700"
             onClick={()=> logout()}
           >
             <LogOut className="h-4 w-4" />

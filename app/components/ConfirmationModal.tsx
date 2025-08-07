@@ -26,7 +26,7 @@ const ConfirmationModal = ({
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
-          <DialogDescription className="text-gray-600">
+          <DialogDescription className="text-gray-600 dark:text-gray-300">
             {description}
           </DialogDescription>
         </DialogHeader>

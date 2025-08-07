@@ -23,9 +23,9 @@ const ProtectedLayout = () => {
 
   // 3. Render protected content
   return (
-    <div className="min-h-screen flex overflow-hidden ">
-      <Outlet />
-    </div>
+      <div className="min-h-screen dark:bg-gray-950 flex overflow-hidden ">
+        <Outlet />
+      </div>
   );
 };
 

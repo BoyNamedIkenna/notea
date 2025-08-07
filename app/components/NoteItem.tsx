@@ -101,11 +101,11 @@ const NoteItem = ({
                         <div
                             key={note.id}
                             onClick={(e) => handleNoteClick(e, note.id)}
-                            className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg hover:border-gray-300 transition-all duration-200 cursor-pointer group"
+                            className="bg-white dark:bg-[#0D1117] rounded-xl border border-gray-200 dark:border-[#30363D] p-6 dark:shadow-gray-600 hover:shadow-lg hover:border-gray-300 transition-all duration-200 cursor-pointer group"
                         >
                             <div className="flex flex-col h-full">
                                 <div className="flex items-start justify-between mb-3">
-                                    <h3 className="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2">
+                                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-300 group-hover:text-blue-600 transition-colors line-clamp-2">
                                         {note.title || "Untitled"}
                                     </h3>
                                     <DropdownMenu onOpenChange={setDropdownOpen}>
@@ -145,11 +145,11 @@ const NoteItem = ({
                                     </DropdownMenu>
                                 </div>
 
-                                <p className="text-gray-600 text-sm mb-4 flex-grow line-clamp-3">
+                                <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 flex-grow line-clamp-3">
                                     {getPreview(note.content) || "No content"}
                                 </p>
 
-                                <div className="flex items-center text-xs text-gray-400">
+                                <div className="flex items-center text-xs text-gray-400 dark:text-gray-500">
                                     <Calendar className="h-3 w-3 mr-1" />
                                     <span>Updated {new Date(note.updated_at).toLocaleDateString()}</span>
                                 </div>

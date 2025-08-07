@@ -9,6 +9,7 @@ import RichTextEditor from "../components/TextEditor";
 import ConfirmationModal from "../components/ConfirmationModal";
 
 
+
 const Editor = () => {
     const { categories, notes, createNote, updateNote, deleteNote } = useAuth();
     const { id } = useParams();
@@ -130,21 +131,21 @@ const Editor = () => {
     };
 
     return (
-        <div className="min-h-screen w-screen  bg-gray-100">
+        <div className="min-h-screen w-screen  bg-gray-100 dark:bg-transparent">
             {/* Top Navigation */}
-            <nav className="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm">
+            <nav className="bg-white dark:bg-transparent border-b border-gray-200 dark:border-[#30363D] sticky top-0 z-10 shadow-sm">
                 <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
                     <div className="flex justify-between items-center h-16">
                         <div className="flex items-center space-x-4">
                             <Link to="/notes">
-                                <Button variant="ghost" size="sm" className="text-gray-600 hover:text-gray-900 hover:bg-gray-100">
+                                <Button variant="ghost" size="sm" className="text-gray-600 dark:text-gray-300 hover:text-gray-900 hover:bg-gray-100">
                                     <ArrowLeft className="h-4 w-4 mr-2" />
                                     Back to Notes
                                 </Button>
                             </Link>
                             <div className="h-4 w-px bg-gray-300" />
                             {!isMobile &&
-                                <div className="flex items-center space-x-2 text-sm text-gray-500">
+                                <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
                                     <FileText className="h-4 w-4" />
                                     <span>{id ? 'Editing Note' : 'New Note'}</span>
                                 </div>
@@ -163,7 +164,7 @@ const Editor = () => {
                                 <Button
                                     onClick={() => handleDeleteNote(id, title)}
                                     variant="ghost"
-                                    className="bg-red-500 hover:bg-red-600 text-white"
+                                    className="bg-red-500 hover:bg-red-600 dark:hover:bg-red-700 text-white"
                                 >
                                     <Trash2 className="h-4 w-4 mr-1" />
                                     Delete
@@ -176,15 +177,15 @@ const Editor = () => {
 
             {/* Editor Content */}
             <div className="max-w-4xl min-h-screen  mx-auto px-6 lg:px-8 py-8 mb-5">
-                <div className="bg-white  rounded-xl shadow-md border border-gray-200 overflow-hidden">
+                <div className="bg-white  dark:bg-[#0D1117] dark:border-[#21262D] rounded-xl shadow-md border border-gray-200 overflow-hidden">
                     {/* Title Input */}
-                    <div className="border-b border-gray-100 p-8 pb-4">
+                    <div className="border-b border-gray-100  dark:border-[#30363D] p-8 pb-4">
                         <Input
                             type="text"
                             placeholder="Note title..."
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
-                            className="text-2xl sm:text-3xl font-semibold border-none shadow-none p-0 focus:ring-0 focus:outline-none placeholder:text-gray-300 bg-transparent"
+                            className="text-2xl sm:text-3xl font-semibold border-none shadow-none pl-2 focus:ring-0 focus:outline-none placeholder:text-gray-300 bg-transparent"
                         />
                     </div>
 
