@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate, Link } from "react-router";
 import { useAuth } from "../context/AuthContext";
 import { Plus, Search, PanelLeft } from "lucide-react";
@@ -6,14 +6,12 @@ import SidebarComponent from "../components/SidebarComponent";
 import NoteItem from "../components/NoteItem";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
-import { ScrollArea } from "../components/ui/scroll-area";
-
 import type { Note, Category } from "../types/notea";
 
 const Notes = () => {
   const {
     categories,
-    setCategories,
+    dispatch,
     addNewCategory,
     toggleActiveCategory,
     renameCategory,
@@ -26,6 +24,7 @@ const Notes = () => {
   } = useAuth();
 
   const [activeCategoryNotes, setActiveCategoryNotes] = useState<Note[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -40,6 +39,62 @@ const Notes = () => {
     let text = firstDivWithText?.textContent?.trim() || doc.body.textContent?.trim() || "";
     return text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
   };
+
+  // Helper function to extract plain text from HTML content
+  const extractTextFromHtml = (htmlContent: string): string => {
+    if (!htmlContent) return '';
+    
+    try {
+      // Create a temporary div to parse HTML
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = htmlContent;
+      
+      // Get all text content, preserving spaces
+      const textContent = tempDiv.textContent || tempDiv.innerText || '';
+      
+      // Clean up extra whitespace but preserve single spaces
+      return textContent.replace(/\s+/g, ' ').trim();
+    } catch (error) {
+      // Fallback: try to strip HTML tags manually
+      return htmlContent
+        .replace(/<[^>]*>/g, ' ') // Replace HTML tags with spaces
+        .replace(/&nbsp;/g, ' ') // Replace &nbsp; with spaces
+        .replace(/&[a-z]+;/gi, ' ') // Replace other HTML entities with spaces
+        .replace(/\s+/g, ' ') // Collapse multiple whitespace
+        .trim();
+    }
+  };
+
+  // Search function
+  const searchInNote = (note: Note, term: string): boolean => {
+    if (!term.trim()) return true;
+    
+    const searchText = term.toLowerCase().trim();
+    
+    // Search in title
+    if (note.title && note.title.toLowerCase().includes(searchText)) {
+      return true;
+    }
+    
+    // Search in content
+    if (note.content) {
+      const contentText = extractTextFromHtml(note.content).toLowerCase();
+      if (contentText.includes(searchText)) {
+        return true;
+      }
+    }
+    
+    return false;
+  };
+
+  // Memoized filtered notes based on search term
+  const filteredNotes = useMemo(() => {
+    if (!searchTerm.trim()) {
+      return activeCategoryNotes;
+    }
+    
+    return activeCategoryNotes.filter(note => searchInNote(note, searchTerm));
+  }, [activeCategoryNotes, searchTerm]);
 
   // Resize logic
   useEffect(() => {
@@ -62,13 +117,23 @@ const Notes = () => {
     }
   }, [activeCategory, notes]);
 
+  // Handle search input change
+  const handleSearchChange = useCallback((value: string) => {
+    setSearchTerm(value);
+  }, []);
+
+  // Clear search when changing categories
+  useEffect(() => {
+    setSearchTerm("");
+  }, [activeCategory?.id]);
+
   // Sidebar props
   const sidebarProps = {
     setIsSidebarOpen,
     notes,
     deleteNote,
     categories,
-    setCategories,
+    dispatch,
     addNewCategory,
     toggleActiveCategory,
     activeCategory,
@@ -79,7 +144,6 @@ const Notes = () => {
   };
 
   return (
-
     <div className="w-screen bg-white dark:bg-transparent flex">
       {isMobile ? (
         <>
@@ -117,7 +181,7 @@ const Notes = () => {
                 <h1 className="text-xl font-semibold text-gray-900">{activeCategory?.name}</h1>
               </div>
               <span className="text-sm bg-gray-200 text-blue-900 px-2 py-1 rounded-full">
-                {activeCategoryNotes.length}
+                {searchTerm ? filteredNotes.length : activeCategoryNotes.length}
               </span>
             </div>
             <div className="flex gap-3 mb-1">
@@ -126,9 +190,9 @@ const Notes = () => {
                 <Input
                   type="text"
                   placeholder="Search notes..."
-                  className=" border-gray-200 dark:border-[#30363D] focus:border-blue-500 focus:ring-blue-500"
-                // value={searchTerm}
-                // onChange={(e) => onSearchChange(e.target.value)}
+                  className="pl-10 border-gray-200 dark:border-[#30363D] focus:border-blue-500 focus:ring-blue-500"
+                  value={searchTerm}
+                  onChange={(e) => handleSearchChange(e.target.value)}
                 />
               </div>
               <Link to="/editor" className="flex-1">
@@ -146,8 +210,18 @@ const Notes = () => {
               <div>
                 <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-300">{activeCategory?.name}</h1>
                 <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                  {activeCategoryNotes.length}{" "}
-                  {activeCategoryNotes.length === 1 ? "note" : "notes"}
+                  {searchTerm ? (
+                    <>
+                      {filteredNotes.length} of {activeCategoryNotes.length}{" "}
+                      {activeCategoryNotes.length === 1 ? "note" : "notes"}
+                      {searchTerm && " matching your search"}
+                    </>
+                  ) : (
+                    <>
+                      {activeCategoryNotes.length}{" "}
+                      {activeCategoryNotes.length === 1 ? "note" : "notes"}
+                    </>
+                  )}
                 </p>
               </div>
               <Link to="/editor">
@@ -165,22 +239,33 @@ const Notes = () => {
                 type="text"
                 placeholder="Search notes..."
                 className="pl-10 border-gray-200 dark:border-[#30363D] focus:border-blue-500 focus:ring-blue-500"
-              // value={searchTerm}
-              // onChange={(e) => onSearchChange(e.target.value)}
+                value={searchTerm}
+                onChange={(e) => handleSearchChange(e.target.value)}
               />
             </div>
           </div>
         )}
 
-
         {/* Notes Grid */}
         <div className="flex-1 p-8 overflow-y-auto">
-          {activeCategoryNotes.length === 0 ? (
-            <p className="text-gray-500 text-center mt-20">No notes in this category.</p>
+          {filteredNotes.length === 0 ? (
+            searchTerm ? (
+              <div className="text-center mt-20">
+                <p className="text-gray-500 mb-2">No notes found matching "{searchTerm}"</p>
+                <button
+                  onClick={() => setSearchTerm("")}
+                  className="text-blue-600 hover:text-blue-700 text-sm"
+                >
+                  Clear search
+                </button>
+              </div>
+            ) : (
+              <p className="text-gray-500 text-center mt-20">No notes in this category.</p>
+            )
           ) : (
             <NoteItem
               categories={categories}
-              activeCategoryNotes={activeCategoryNotes}
+              activeCategoryNotes={filteredNotes}
               changeNoteCategory={changeNoteCategory}
               deleteNote={deleteNote}
               getPreview={getPreview}

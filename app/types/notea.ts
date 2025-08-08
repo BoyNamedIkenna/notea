@@ -21,19 +21,32 @@ export interface Note {
     updated_at: Date;
 }
 
+export type Action =
+  | { type: "SET_PROFILE"; payload: Profile | null }
+  | { type: "SET_CATEGORIES"; payload: Category[] }
+  | { type: "ADD_CATEGORY"; payload: Category }
+  | { type: "UPDATE_CATEGORY"; payload: Category }
+  | { type: "DELETE_CATEGORY"; payload: string }
+  | { type: "SET_NOTES"; payload: Note[] }
+  | { type: "ADD_NOTE"; payload: Note }
+  | { type: "UPDATE_NOTE"; payload: Note }
+  | { type: "DELETE_NOTE"; payload: string }
+  | { type: "SET_LOADING"; payload: boolean };
+
+
 export interface SidebarProps {
-    setIsSidebarOpen:React.Dispatch<React.SetStateAction<boolean>>
+    setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>
     notes: Note[];
     deleteNote: (id: string) => Promise<void>;
     categories: Category[];
-    setCategories: React.Dispatch<React.SetStateAction<Category[]>>;
+    dispatch: React.Dispatch<Action>;
     addNewCategory: (newCategoryName: string) => Promise<void>;
     toggleActiveCategory: (categoryId: string) => Promise<void>;
     renameCategory: (categoryId: string, newName: string) => Promise<void>;
     deleteCategory: (categoryId: string) => Promise<void>;
     activeCategory?: Category;
     profile: Profile | null;
-    logout:() => Promise<void>
+    logout: () => Promise<void>
 }
 
 export interface ConfirmationModalProps {

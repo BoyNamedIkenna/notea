@@ -16,7 +16,7 @@ const SidebarComponent = ({
   notes,
   deleteNote,
   categories,
-  setCategories,
+  dispatch,
   addNewCategory,
   toggleActiveCategory,
   renameCategory,
@@ -210,7 +210,7 @@ const SidebarComponent = ({
         <div className="p-4">
           {/* All Notes Button */}
           <button
-            onClick={() => {toggleActiveCategory(generalCategory?.id || ''), setIsSidebarOpen(false)}}
+            onClick={() => { toggleActiveCategory(generalCategory?.id || ''), setIsSidebarOpen(false) }}
             className={`group w-full flex items-center justify-between px-3 py-2 mb-4 text-sm rounded-lg transition-colors ${activeCategory?.name === 'General'
               ? 'bg-blue-50 dark:bg-[#0D1117] border dark:border-[#30363D] border-blue-200 text-blue-700 dark:text-blue-500'
               : 'text-gray-700 dark:text-gray-100  hover:text-gray-900  hover:bg-gray-50 dark:hover:bg-gray-800'
@@ -258,7 +258,7 @@ const SidebarComponent = ({
           <div className="space-y-1 p-o">
             <DragDropProvider
               categories={categories}
-              setCategories={setCategories}
+              dispatch={dispatch}
               onDragStart={handleDragStart}
               onDragStop={handleDragStop}
             >
@@ -374,7 +374,7 @@ const SidebarComponent = ({
         <div className="flex items-center space-x-3 mb-3">
           <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
             <span className="text-xs font-medium text-white ">
-               {profile?.user_name?.charAt(0).toUpperCase()}
+              {profile?.user_name?.charAt(0).toUpperCase()}
             </span>
           </div>
           <div className="flex-1 min-w-0">
@@ -391,7 +391,7 @@ const SidebarComponent = ({
             variant="ghost"
             size="sm"
             className="text-red-600 dark:text-red-500 hover:text-red-700"
-            onClick={()=> logout()}
+            onClick={() => logout()}
           >
             <LogOut className="h-4 w-4" />
           </Button>

@@ -17,12 +17,12 @@ import {
 } from "@dnd-kit/sortable";
 import { useState, useCallback, useMemo } from "react"; // merged into one line
 import debounce from "lodash/debounce";
-import { type Category } from "../types/notea";
+import type{  Category, Action } from "../types/notea";
 import { type ReactNode } from "react";
 
 interface DragDropProviderProps {
   categories: Category[];
-  setCategories: React.Dispatch<React.SetStateAction<Category[]>>;
+  dispatch: React.Dispatch<Action>;
   children: ReactNode;
   onDragStart?: () => void;
   onDragStop?: () => void;
@@ -30,7 +30,7 @@ interface DragDropProviderProps {
 
 export const DragDropProvider = ({
   categories,
-  setCategories,
+  dispatch,
   children,
   onDragStart,
   onDragStop
@@ -64,7 +64,7 @@ export const DragDropProvider = ({
     }, 1000);
   }, []);
 
-    // 👇 Called when drag starts — we capture the dragged category ID
+  // 👇 Called when drag starts — we capture the dragged category ID
   const handleDragStart = (event: DragStartEvent) => {
     setActiveId(event.active.id as string);
     onDragStart?.();
@@ -80,8 +80,8 @@ export const DragDropProvider = ({
   const handleDragEnd = useCallback(
     (event: DragEndEvent) => {
       const { active, over } = event;
-      setActiveId(null); // Clear the dragged item ID
-      onDragStop?.(); // 👈 restore expansion
+      setActiveId(null);
+      onDragStop?.();
 
       if (!over || active.id === over.id) return;
 
@@ -93,12 +93,14 @@ export const DragDropProvider = ({
         position: idx,
       }));
 
-      setCategories(updated);
+      // Use dispatch instead of setCategories
+      dispatch({ type: "SET_CATEGORIES", payload: updated });
+
       debouncedUpdatePositions(
         updated.map((cat) => ({ id: cat.id, position: cat.position }))
       );
     },
-    [categories, setCategories, debouncedUpdatePositions]
+    [categories, dispatch, debouncedUpdatePositions] // Update dependencies
   );
 
   return (

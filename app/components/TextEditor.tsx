@@ -196,7 +196,7 @@ const RichTextEditor = ({ content, onChange, placeholder = "Start writing..." }:
           ref={editorRef}
           contentEditable
           onInput={handleInput}
-          className="h-[60vh] md:min-h-[70vh] lg:min-h-[80vh] p-8 focus:outline-none text-gray-800 [&:empty]:before:content-[attr(data-placeholder)] [&:empty]:before:text-gray-400 [&:empty]:before:pointer-events-none"
+          className="h-[60vh] md:min-h-[70vh] lg:min-h-[80vh] p-8 focus:outline-none text-gray-800 dark:text-white [&:empty]:before:content-[attr(data-placeholder)] [&:empty]:before:text-gray-400 [&:empty]:before:pointer-events-none"
           style={{
             fontSize: "16px",
             lineHeight: "1.75",

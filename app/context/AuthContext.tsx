@@ -7,8 +7,7 @@ import {
   useCallback
 } from "react";
 import { supabase } from "~/lib/supabase-client";
-import type { Profile } from "../types/profile";
-import type { Category, Note } from "../types/notea";
+import type { Profile, Category, Note, Action } from "../types/notea";
 
 // --- Types ---
 type State = {
@@ -17,18 +16,6 @@ type State = {
   notes: Note[];
   loading: boolean;
 };
-
-type Action =
-  | { type: "SET_PROFILE"; payload: Profile | null }
-  | { type: "SET_CATEGORIES"; payload: Category[] }
-  | { type: "ADD_CATEGORY"; payload: Category }
-  | { type: "UPDATE_CATEGORY"; payload: Category }
-  | { type: "DELETE_CATEGORY"; payload: string }
-  | { type: "SET_NOTES"; payload: Note[] }
-  | { type: "ADD_NOTE"; payload: Note }
-  | { type: "UPDATE_NOTE"; payload: Note }
-  | { type: "DELETE_NOTE"; payload: string }
-  | { type: "SET_LOADING"; payload: boolean };
 
 const initialState: State = {
   profile: null,
@@ -156,38 +143,40 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   // --- Actions ---
   const addNewCategory = async (name: string) => {
     if (!state.profile) return;
+    const maxPosition = Math.max(...state.categories.map(cat => cat.position || 0), -1);
+    const nextPosition = maxPosition + 1;
     const { data, error } = await supabase
       .from("categories")
-      .insert({ name, user_id: state.profile.user_id, is_active: true })
+      .insert({ name, user_id: state.profile.user_id, is_active: true, position: nextPosition })
       .select()
       .single();
     if (!error && data) dispatch({ type: "ADD_CATEGORY", payload: data });
   };
 
   const toggleActiveCategory = async (id: string) => {
-  // Optimistically update UI first
-  const updatedCategories = state.categories.map(cat =>
-    cat.id === id ? { ...cat, is_active: true } : { ...cat, is_active: false }
-  );
-  dispatch({ type: "SET_CATEGORIES", payload: updatedCategories });
+    // Optimistically update UI first
+    const updatedCategories = state.categories.map(cat =>
+      cat.id === id ? { ...cat, is_active: true } : { ...cat, is_active: false }
+    );
+    dispatch({ type: "SET_CATEGORIES", payload: updatedCategories });
 
-  // Then perform Supabase update in the background
-  const { error } = await supabase
-    .from("categories")
-    .update({ is_active: true })
-    .eq("id", id);
+    // Then perform Supabase update in the background
+    const { error } = await supabase
+      .from("categories")
+      .update({ is_active: true })
+      .eq("id", id);
 
-  // Optionally reset others to false in Supabase (if needed)
-  await supabase
-    .from("categories")
-    .update({ is_active: false })
-    .neq("id", id);
+    // Optionally reset others to false in Supabase (if needed)
+    await supabase
+      .from("categories")
+      .update({ is_active: false })
+      .neq("id", id);
 
-  if (error) {
-    console.error("Failed to update active category", error);
-    // Optionally: Revert the optimistic update if needed
-  }
-};
+    if (error) {
+      console.error("Failed to update active category", error);
+      // Optionally: Revert the optimistic update if needed
+    }
+  };
 
 
   const renameCategory = async (id: string, newName: string) => {
@@ -257,6 +246,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       value={{
         ...state,
         setProfile: (p: Profile | null) => dispatch({ type: "SET_PROFILE", payload: p }),
+        dispatch,
         addNewCategory,
         toggleActiveCategory,
         renameCategory,
